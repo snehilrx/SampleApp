@@ -47,10 +47,11 @@ fun LoginScreen(navController: NavHostController) {
                 bodyText = state.value.submitOverlaySuccessMessage,
             ),
             selection = InfoSelection(
+                negativeButton = null,
                 onPositiveClick = {
-                    navController.navigate(Routes.HOME, navOptions = navOptions {
+                    navController.navigate(Routes.HOME,) {
                         popUpTo(Routes.LOGIN)
-                    })
+                    }
                 },
             ),
             properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
@@ -81,20 +82,20 @@ fun LoginScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                onClick = { loginViewModel.handleSubmit() }
-            ) {
-                Text(text = stringResource(id = R.string.login))
-            }
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
                 onClick = {
                     navController.navigate(Routes.SIGNUP, navOptions = navOptions {
                         launchSingleTop = true
                     })
                 }) {
                 Text(text = stringResource(id = R.string.sign_up))
+            }
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                onClick = { loginViewModel.handleSubmit() }
+            ) {
+                Text(text = stringResource(id = R.string.login))
             }
         }
     }

@@ -3,7 +3,7 @@
     <string name="username">Username</string>
     <string name="password">Password\n</string>
     <string name="select_country">Select Country</string>
-    <string name="incorrect_password">Incorrect Password</string>
+    <string name="incorrect_password">Incorrect Password or Username</string>
     <string name="signup_success">Successful Signup</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="username_is_already_taken">Username is already taken</string>
@@ -16,4 +16,11 @@
     <string name="logout">Logout</string>
     <string name="sign_up">Sign Up</string>
     <string name="success">Success</string>
+    <string name="password_must_have_at_least_8_characters">Password must have at least 8 characters. \n</string>
+    <string name="password_must_contain_at_least_one_digit">Password must contain at least one digit.  \n</string>
+    <string name="password_must_contain_at_least_one_special_character"><![CDATA[Password must contain at least one special character [!@#$%&()].  \n]]></string>
+    <string name="password_must_contain_at_least_one_lowercase_letter">Password must contain at least one lowercase letter.  \n</string>
+    <string name="password_must_contain_at_least_one_uppercase_letter">Password must contain at least one uppercase letter. \n</string>
+    <string name="username_cannot_be_blank">Username cannot be blank</string>
+    <string name="please_select_a_country">Please select a country</string>
 </resources>

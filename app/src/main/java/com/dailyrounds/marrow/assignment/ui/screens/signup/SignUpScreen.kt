@@ -47,17 +47,19 @@ fun SignUpScreen(navController: NavHostController) {
             state = rememberUseCaseState(
                 visible = true,
                 onCloseRequest = {  }),
-            header = Header.Default(title = stringResource(id = R.string.error)),
+            header = Header.Default(title = stringResource(id = R.string.success)),
             body = InfoBody.Default(
                 bodyText = state.value.submitOverlaySuccessMessage,
             ),
             selection = InfoSelection(
+                negativeButton = null,
                 onPositiveClick = {
                     navController.navigate(Routes.LOGIN) {
                         launchSingleTop = true
                     }
                 },
             ),
+
             properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
         )
     }

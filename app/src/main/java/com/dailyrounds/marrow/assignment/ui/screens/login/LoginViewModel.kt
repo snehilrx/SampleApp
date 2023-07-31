@@ -45,15 +45,14 @@ class LoginViewModel(): ViewModel() {
 
     fun handleSubmit() {
         viewModelScope.launch {
+            validatePassword(uiState.value.password.value)
+            validateUsername(uiState.value.name.value)
             if (uiState.value.valid()) {
-                // this will trigger the focus to edit text contain the error
-                uiState.value = uiState.value.newUiState()
-            } else {
                 try {
                     application.currentUser = repo.login(uiState.value)
-                    uiState.value = uiState.value.newUiState(successMessage = application.getString(R.string.login_success))
+                    uiState.value = uiState.value.newUiState(successMessage = application.getString(R.string.login_success), failureMessage = "")
                 } catch (e: LoginException) {
-                    uiState.value = uiState.value.newUiState(failureMessage =  application.getString(R.string.incorrect_password))
+                    uiState.value = uiState.value.newUiState(failureMessage =  application.getString(R.string.incorrect_password), successMessage = "")
                 }
             }
         }

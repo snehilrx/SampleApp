@@ -19,8 +19,8 @@ class CommonRepository(private val application: MyApplication) {
     suspend fun saveUser(value: SignUpUiState) {
         application.db.userDao().insert(
             UserEntity(
-                username = value.name.value.text,
-                password = value.password.value.text,
+                username = value.name.value.text.trim(),
+                password = value.password.value.text.trim(),
                 countryCode = value.country.value.countryCode ?: "",
             )
         )
@@ -32,7 +32,7 @@ class CommonRepository(private val application: MyApplication) {
 
     @Throws(LoginException::class)
     suspend fun login(value: LoginUiState): UserEntity {
-        val user = application.db.userDao().getUser(value.name.value.text, value.password.value.text)
+        val user = application.db.userDao().getUser(value.name.value.text.trim(), value.password.value.text.trim())
             ?: throw LoginException("No user is found")
         return user
     }
