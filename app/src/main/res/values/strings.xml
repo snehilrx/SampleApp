@@ -10,4 +10,7 @@
     <string name="ok">OK</string>
     <string name="error">Error</string>
     <string name="submit">Submit</string>
+    <string name="enter_username">Enter username</string>
+    <string name="login_sucess">Successfully Logged In</string>
+    <string name="login">Login</string>
 </resources>
