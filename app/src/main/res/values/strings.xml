@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">SampleApp</string>
+    <string name="username">Username</string>
+    <string name="password">Password\n</string>
+    <string name="country">Country</string>
+    <string name="incorrect_password">Incorrect Password</string>
+    <string name="signup_success">Successful Signup</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="username_is_already_taken">Username is already taken</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
+    <string name="submit">Submit</string>
 </resources>
