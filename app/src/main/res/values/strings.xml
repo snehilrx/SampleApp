@@ -23,4 +23,6 @@
     <string name="password_must_contain_at_least_one_uppercase_letter">Password must contain at least one uppercase letter. \n</string>
     <string name="username_cannot_be_blank">Username cannot be blank</string>
     <string name="please_select_a_country">Please select a country</string>
+    <string name="logged_out_successfully">Logged out successfully.</string>
+    <string name="country_code">country code</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,10 +33,28 @@ import com.maxkeppeler.sheets.info.models.InfoSelection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, showLoggedOutMessage: MutableState<Boolean>) {
     val loginViewModel: LoginViewModel = viewModel()
     val state = remember {
         loginViewModel.uiState
+    }
+    if (showLoggedOutMessage.value) {
+        InfoDialog(
+            state = rememberUseCaseState(
+                visible = true,
+                onCloseRequest = { }),
+            header = Header.Default(title = stringResource(id = R.string.success)),
+            body = InfoBody.Default(
+                bodyText = stringResource(id = R.string.logged_out_successfully),
+            ),
+            selection = InfoSelection(
+                negativeButton = null,
+                onPositiveClick = {
+                  showLoggedOutMessage.value = false
+                },
+            ),
+            properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
+        )
     }
     if (state.value.submitOverlaySuccessMessage.isNotEmpty()) {
         InfoDialog(
@@ -50,7 +69,9 @@ fun LoginScreen(navController: NavHostController) {
                 negativeButton = null,
                 onPositiveClick = {
                     navController.navigate(Routes.HOME,) {
-                        popUpTo(Routes.LOGIN)
+                        popUpTo(Routes.LOGIN) {
+                            inclusive = true
+                        }
                     }
                 },
             ),
