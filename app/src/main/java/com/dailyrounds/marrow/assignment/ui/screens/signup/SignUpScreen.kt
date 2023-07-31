@@ -23,7 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.dailyrounds.marrow.assignment.R
+import com.dailyrounds.marrow.assignment.Routes
 import com.dailyrounds.marrow.assignment.data.InputState
 import com.maxkeppeker.sheets.core.models.base.Header
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
@@ -33,7 +35,7 @@ import com.maxkeppeler.sheets.info.models.InfoSelection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(navController: NavHostController) {
     val signUpViewModel : SignUpViewModel = viewModel()
     val state = remember {
         signUpViewModel.uiState
@@ -52,7 +54,9 @@ fun SignUpScreen() {
             ),
             selection = InfoSelection(
                 onPositiveClick = {
-                    // todo handle navigation
+                    navController.navigate(Routes.LOGIN) {
+                        launchSingleTop = true
+                    }
                 },
             ),
             properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)

@@ -11,10 +11,12 @@ import com.dailyrounds.marrow.assignment.data.InputState
 import com.dailyrounds.marrow.assignment.ui.screens.commons.CommonRepository
 import kotlinx.coroutines.launch
 
-class SignUpViewModel(
-    private val application: MyApplication = MyApplication,
+class SignUpViewModel() : ViewModel() {
+
+
+    // when using hilt we can use injections
+    private val application: MyApplication = MyApplication
     private val repo: CommonRepository = CommonRepository(application)
-) : ViewModel() {
 
     val countries = repo.getCountries()
 

@@ -1,6 +1,7 @@
 package com.dailyrounds.marrow.assignment.ui.screens.login
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -17,7 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.navOptions
 import com.dailyrounds.marrow.assignment.R
+import com.dailyrounds.marrow.assignment.Routes
 import com.dailyrounds.marrow.assignment.data.InputState
 import com.maxkeppeker.sheets.core.models.base.Header
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
@@ -27,7 +31,7 @@ import com.maxkeppeler.sheets.info.models.InfoSelection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     val loginViewModel : LoginViewModel = viewModel()
     val state = remember {
         loginViewModel.uiState
@@ -43,7 +47,9 @@ fun LoginScreen() {
             ),
             selection = InfoSelection(
                 onPositiveClick = {
-                    // todo handle navigation
+                    navController.navigate(Routes.HOME, navOptions = navOptions {
+                        popUpTo(Routes.LOGIN)
+                    })
                 },
             ),
             properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
@@ -57,8 +63,18 @@ fun LoginScreen() {
             loginViewModel.validatePassword(it)
         }
 
-        Button(onClick = {loginViewModel.handleSubmit()}) {
-            Text(text = stringResource(id = R.string.login))
+        Row {
+            Button(onClick = {loginViewModel.handleSubmit()}) {
+                Text(text = stringResource(id = R.string.login))
+            }
+
+            Button(onClick = {
+                navController.navigate(Routes.SIGNUP, navOptions = navOptions {
+                    launchSingleTop = true
+                })
+            }) {
+                Text(text = stringResource(id = R.string.sign_up))
+            }
         }
     }
 }

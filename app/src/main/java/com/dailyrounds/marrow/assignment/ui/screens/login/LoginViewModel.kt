@@ -11,10 +11,11 @@ import com.dailyrounds.marrow.assignment.ui.screens.commons.CommonRepository
 import kotlinx.coroutines.launch
 import javax.security.auth.login.LoginException
 
-class LoginViewModel(
-    private val application: MyApplication = MyApplication,
+class LoginViewModel(): ViewModel() {
+
+    // when using hilt we can use injections
+    private val application: MyApplication = MyApplication
     private val repo: CommonRepository = CommonRepository(application)
-) : ViewModel() {
 
     private val initialState: LoginUiState = LoginUiState(BLANK, BLANK)
 

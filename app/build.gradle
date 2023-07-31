@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id "kotlin-kapt"
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -56,6 +57,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
     implementation "androidx.room:room-ktx:2.5.2"
     implementation "androidx.room:room-common:2.5.2"
+    implementation 'androidx.navigation:navigation-compose:2.6.0'
     kapt "androidx.room:room-compiler:2.5.2"
     implementation 'com.maxkeppeler.sheets-compose-dialogs:core:+'
     implementation 'com.maxkeppeler.sheets-compose-dialogs:info:+'

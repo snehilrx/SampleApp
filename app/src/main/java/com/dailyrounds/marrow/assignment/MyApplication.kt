@@ -6,7 +6,9 @@ import com.dailyrounds.marrow.assignment.db.MyDb
 import com.dailyrounds.marrow.assignment.db.UserEntity
 
 object MyApplication : Application() {
-    val db = Room.databaseBuilder(this, MyDb::class.java, "sample_db").build()
+    val db by lazy {
+        Room.databaseBuilder(this, MyDb::class.java, "sample_db").build()
+    }
 
     var currentUser: UserEntity? = null
 }
