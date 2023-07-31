@@ -2,7 +2,7 @@
     <string name="app_name">SampleApp</string>
     <string name="username">Username</string>
     <string name="password">Password\n</string>
-    <string name="country">Country</string>
+    <string name="select_country">Select Country</string>
     <string name="incorrect_password">Incorrect Password</string>
     <string name="signup_success">Successful Signup</string>
     <string name="something_went_wrong">Something went wrong</string>
@@ -11,8 +11,9 @@
     <string name="error">Error</string>
     <string name="submit">Submit</string>
     <string name="enter_username">Enter username</string>
-    <string name="login_sucess">Successfully Logged In</string>
+    <string name="login_success">Successfully Logged In</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
     <string name="sign_up">Sign Up</string>
+    <string name="success">Success</string>
 </resources>

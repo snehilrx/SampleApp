@@ -1,21 +1,24 @@
 package com.dailyrounds.marrow.assignment.ui.screens.login
 
+import androidx.compose.ui.text.input.TextFieldValue
 import com.dailyrounds.marrow.assignment.data.InputState
 
 data class LoginUiState(
-    val name: InputState<String>,
-    val password: InputState<String>,
-    val submitOverlaySuccessMessage : String = ""
+    val name: InputState<TextFieldValue>,
+    val password: InputState<TextFieldValue>,
+    val submitOverlaySuccessMessage : String = "",
+    val submitOverlayFailureMessage : String = ""
 ) {
     fun valid(): Boolean {
-        return name.value.isNotEmpty() && password.value.isNotEmpty()
+        return name.value.text.isNotEmpty() && password.value.text.isNotEmpty()
     }
 
     fun newUiState(
-        newUsername: InputState<String> = name,
-        newPassword: InputState<String> = password,
-        successMessage: String = submitOverlaySuccessMessage
+        newUsername: InputState<TextFieldValue> = name,
+        newPassword: InputState<TextFieldValue> = password,
+        successMessage: String = submitOverlaySuccessMessage,
+        failureMessage: String = submitOverlayFailureMessage
     ): LoginUiState {
-        return  LoginUiState(newUsername, newPassword, successMessage)
+        return  LoginUiState(newUsername, newPassword, successMessage, failureMessage)
     }
 }

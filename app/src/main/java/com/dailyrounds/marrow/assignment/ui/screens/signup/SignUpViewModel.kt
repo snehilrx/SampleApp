@@ -15,7 +15,7 @@ class SignUpViewModel() : ViewModel() {
 
 
     // when using hilt we can use injections
-    private val application: MyApplication = MyApplication
+    private val application: MyApplication = MyApplication.instance
     private val repo: CommonRepository = CommonRepository(application)
 
     val countries = repo.getCountries()
@@ -33,10 +33,12 @@ class SignUpViewModel() : ViewModel() {
         username: TextFieldValue = TextFieldValue()
     ) {
         //  checks if user already exists or not in db
-        if (repo.checkIfUsernameIsAvailable(username.text)) {
-            uiState.value = uiState.value.newUiState(newUsername = InputState(username.text, ""))
-        } else {
-            uiState.value = uiState.value.newUiState(newUsername = InputState(username.text, application.getString(R.string.username_is_already_taken)))
+        viewModelScope.launch {
+            if (repo.checkIfUsernameIsAvailable(username.text)) {
+                uiState.value = uiState.value.newUiState(newUsername = InputState(username, ""))
+            } else {
+                uiState.value = uiState.value.newUiState(newUsername = InputState(username, application.getString(R.string.username_is_already_taken)))
+            }
         }
     }
 
@@ -48,7 +50,7 @@ class SignUpViewModel() : ViewModel() {
         } else {
             application.getString(R.string.incorrect_password)
         }
-        uiState.value = uiState.value.newUiState(newPassword = InputState(password.text, errorText))
+        uiState.value = uiState.value.newUiState(newPassword = InputState(password, errorText))
     }
 
     fun validateCountry(
@@ -77,7 +79,7 @@ class SignUpViewModel() : ViewModel() {
                 uiState.value = uiState.value.newUiState()
             } else {
                 repo.saveUser(uiState.value)
-                uiState.value = uiState.value.newUiState(successMessage = MyApplication.getString(R.string.signup_success))
+                uiState.value = uiState.value.newUiState(successMessage = application.getString(R.string.signup_success))
             }
         }
     }
@@ -86,6 +88,6 @@ class SignUpViewModel() : ViewModel() {
     companion object {
         private val passwordRegex =
             "^(?=.*[0-9])(?=.*[!@#$%&()])(?=.*[a-z])(?=.*[A-Z]).{8,}$".toPattern()
-        private val BLANK: InputState<String> = InputState("", "")
+        private val BLANK: InputState<TextFieldValue> = InputState(TextFieldValue(""), "")
     }
 }

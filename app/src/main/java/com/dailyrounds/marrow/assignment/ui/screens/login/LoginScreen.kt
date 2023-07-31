@@ -1,28 +1,29 @@
 package com.dailyrounds.marrow.assignment.ui.screens.login
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
 import com.dailyrounds.marrow.assignment.R
 import com.dailyrounds.marrow.assignment.Routes
-import com.dailyrounds.marrow.assignment.data.InputState
+import com.dailyrounds.marrow.assignment.ui.components.CenterCard
+import com.dailyrounds.marrow.assignment.ui.components.TextInput
+import com.dailyrounds.marrow.assignment.ui.theme.LocalAppTypo
+import com.dailyrounds.marrow.assignment.ui.theme.SampleAppTheme
 import com.maxkeppeker.sheets.core.models.base.Header
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.info.InfoDialog
@@ -32,16 +33,16 @@ import com.maxkeppeler.sheets.info.models.InfoSelection
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavHostController) {
-    val loginViewModel : LoginViewModel = viewModel()
+    val loginViewModel: LoginViewModel = viewModel()
     val state = remember {
         loginViewModel.uiState
     }
-    if  (state.value.submitOverlaySuccessMessage.isNotEmpty()) {
+    if (state.value.submitOverlaySuccessMessage.isNotEmpty()) {
         InfoDialog(
             state = rememberUseCaseState(
                 visible = true,
-                onCloseRequest = {  }),
-            header = Header.Default(title = stringResource(id = R.string.error)),
+                onCloseRequest = { }),
+            header = Header.Default(title = stringResource(id = R.string.success)),
             body = InfoBody.Default(
                 bodyText = state.value.submitOverlaySuccessMessage,
             ),
@@ -54,57 +55,47 @@ fun LoginScreen(navController: NavHostController) {
             ),
             properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false)
         )
-    }
-    Column {
-        TextInput(state.value.name) {
+    } 
+    CenterCard {
+        Text(
+            text = stringResource(id = R.string.app_name), style = LocalAppTypo.current.displayMedium)
+        TextInput(
+            label = stringResource(R.string.username),
+            state = state.value.name,
+            keyboardOptions =  KeyboardOptions(imeAction = ImeAction.Next)) {
             loginViewModel.validateUsername(it)
         }
-        TextInput(state.value.password) {
+        TextInput(
+            label = stringResource(R.string.password),
+            state = state.value.password,
+            keyboardOptions =  KeyboardOptions(imeAction = ImeAction.Done),
+            visualTransformation = PasswordVisualTransformation()
+        ) {
             loginViewModel.validatePassword(it)
         }
-
-        Row {
-            Button(onClick = {loginViewModel.handleSubmit()}) {
+        Text(text = state.value.submitOverlayFailureMessage, color = MaterialTheme.colorScheme.error)
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(SampleAppTheme.dimens.grid_0_5),
+        ) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                onClick = { loginViewModel.handleSubmit() }
+            ) {
                 Text(text = stringResource(id = R.string.login))
             }
-
-            Button(onClick = {
-                navController.navigate(Routes.SIGNUP, navOptions = navOptions {
-                    launchSingleTop = true
-                })
-            }) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                onClick = {
+                    navController.navigate(Routes.SIGNUP, navOptions = navOptions {
+                        launchSingleTop = true
+                    })
+                }) {
                 Text(text = stringResource(id = R.string.sign_up))
             }
         }
     }
-}
-
-@Composable
-private fun TextInput(
-    state: InputState<String>,
-    validationCallback: (TextFieldValue) -> Unit
-) {
-    OutlinedTextField(
-        value = TextFieldValue(state.value),
-        singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
-        isError = state.isValid(),
-        onValueChange = {
-            validationCallback.invoke(it)
-        },
-        supportingText = {
-            if (!state.isValid()) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = state.error,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        },
-        trailingIcon = {
-            if (!state.isValid())
-                Icon(Icons.Filled.Warning, "error", tint = MaterialTheme.colorScheme.error)
-        },
-        label = { Text(stringResource(R.string.username)) },
-    )
 }

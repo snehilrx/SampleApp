@@ -14,6 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.platform.LocalConfiguration
 
 
 private val LightColors = lightColorScheme(
@@ -82,6 +86,19 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
+fun ProvideDimens(
+    dimensions: Dimensions,
+    content: @Composable () -> Unit
+) {
+    val dimensionSet = remember { dimensions }
+    CompositionLocalProvider(LocalAppDimens provides dimensionSet, content = content)
+}
+
+private val LocalAppDimens = staticCompositionLocalOf {
+    smallDimensions
+}
+
+@Composable
 fun SampleAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
@@ -96,6 +113,10 @@ fun SampleAppTheme(
         darkTheme -> DarkColors
         else -> LightColors
     }
+    val configuration = LocalConfiguration.current
+    val dimensions = if (configuration.screenWidthDp <= 360) smallDimensions else sw360Dimensions
+    val typography = if (configuration.screenWidthDp <= 360) SmallTypography else DefaultTypography
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -105,7 +126,16 @@ fun SampleAppTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme, typography = Typography, content = content
-    )
+    ProvideDimens(dimensions = dimensions) {
+        MaterialTheme(
+            colorScheme = colorScheme, typography = typography, content = content
+        )
+    }
+}
+
+object SampleAppTheme {
+
+    val dimens: Dimensions
+        @Composable
+        get() = LocalAppDimens.current
 }

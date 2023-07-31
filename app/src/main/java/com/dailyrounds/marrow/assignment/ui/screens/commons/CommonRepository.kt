@@ -9,30 +9,30 @@ import com.dailyrounds.marrow.assignment.ui.screens.signup.SignUpUiState
 import com.google.gson.Gson
 import javax.security.auth.login.LoginException
 
-class CommonRepository(val application: MyApplication) {
+class CommonRepository(private val application: MyApplication) {
 
     fun getCountries(): Map<String, CountryRegion> {
         val rawText = application.assets.open(COUNTRIES_FILE_NAME).bufferedReader().readText()
-        return gson.fromJson(rawText, Countries::class.java).data.countryRegionMap
+        return gson.fromJson(rawText, Countries::class.java).data
     }
 
     suspend fun saveUser(value: SignUpUiState) {
         application.db.userDao().insert(
             UserEntity(
-                username = value.name.value,
-                password = value.password.value,
+                username = value.name.value.text,
+                password = value.password.value.text,
                 countryCode = value.country.value.countryCode ?: "",
             )
         )
     }
 
-    fun checkIfUsernameIsAvailable(username: String): Boolean {
+    suspend fun checkIfUsernameIsAvailable(username: String): Boolean {
         return application.db.userDao().isUserNameAvailable(username)
     }
 
     @Throws(LoginException::class)
-    fun login(value: LoginUiState): UserEntity {
-        val user = application.db.userDao().getUser(value.name.value, value.password.value)
+    suspend fun login(value: LoginUiState): UserEntity {
+        val user = application.db.userDao().getUser(value.name.value.text, value.password.value.text)
             ?: throw LoginException("No user is found")
         return user
     }

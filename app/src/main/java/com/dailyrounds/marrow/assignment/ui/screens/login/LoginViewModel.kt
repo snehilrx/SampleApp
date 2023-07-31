@@ -14,7 +14,7 @@ import javax.security.auth.login.LoginException
 class LoginViewModel(): ViewModel() {
 
     // when using hilt we can use injections
-    private val application: MyApplication = MyApplication
+    private val application: MyApplication = MyApplication.instance
     private val repo: CommonRepository = CommonRepository(application)
 
     private val initialState: LoginUiState = LoginUiState(BLANK, BLANK)
@@ -26,9 +26,9 @@ class LoginViewModel(): ViewModel() {
     ) {
         //  checks if user already exists or not in db
         if (username.text.isNotEmpty()) {
-            uiState.value = uiState.value.newUiState(newUsername = InputState(username.text, ""))
+            uiState.value = uiState.value.newUiState(newUsername = InputState(username, ""))
         } else {
-            uiState.value = uiState.value.newUiState(newUsername = InputState(username.text, application.getString(R.string.enter_username)))
+            uiState.value = uiState.value.newUiState(newUsername = InputState(username, application.getString(R.string.enter_username)))
         }
     }
 
@@ -40,7 +40,7 @@ class LoginViewModel(): ViewModel() {
         } else {
             application.getString(R.string.incorrect_password)
         }
-        uiState.value = uiState.value.newUiState(newPassword = InputState(password.text, errorText))
+        uiState.value = uiState.value.newUiState(newPassword = InputState(password, errorText))
     }
 
     fun handleSubmit() {
@@ -50,10 +50,10 @@ class LoginViewModel(): ViewModel() {
                 uiState.value = uiState.value.newUiState()
             } else {
                 try {
-                    MyApplication.currentUser = repo.login(uiState.value)
-                    uiState.value = uiState.value.newUiState(successMessage = MyApplication.getString(R.string.login_sucess))
+                    application.currentUser = repo.login(uiState.value)
+                    uiState.value = uiState.value.newUiState(successMessage = application.getString(R.string.login_success))
                 } catch (e: LoginException) {
-                    uiState.value = uiState.value.newUiState(successMessage =  MyApplication.getString(R.string.incorrect_password))
+                    uiState.value = uiState.value.newUiState(failureMessage =  application.getString(R.string.incorrect_password))
                 }
             }
         }
@@ -61,6 +61,6 @@ class LoginViewModel(): ViewModel() {
 
 
     companion object {
-        private val BLANK: InputState<String> = InputState("", "")
+        private val BLANK: InputState<TextFieldValue> = InputState(TextFieldValue(""), "")
     }
 }
